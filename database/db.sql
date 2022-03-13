@@ -3,11 +3,15 @@ CREATE DATABASE amazing_store;
 use amazing_store;
 
 --USERS TABLE
-CREATE TABLE users(
-    id int(10) not null,
+CREATE TABLE usuarios(
+    cedula int(10) not null PRIMARY KEY,
+    nombre varchar(100) not null,
+    apellido varchar (100) not null,
+    email varchar (100) not null,
     username varchar(16) not null,
     password varchar(60) not null,
-    fullname varchar(100) not null
+    saldo float not null,
+    codigo_direccion int
 );
 
 CREATE TABLE productos(

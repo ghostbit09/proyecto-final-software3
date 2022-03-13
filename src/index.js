@@ -21,6 +21,7 @@ const storage = multer.diskStorage({
 
 //Inicializaciones
 const app = express();
+require('./lib/passport');
 
 //Configuraciones del servidor
 app.set('port', process.env.PORT || 4000);
@@ -35,10 +36,20 @@ app.engine('.hbs', engine({
 app.set('view engine', '.hbs');
 
 //Middlewares
+app.use(session({ //Crea una sesion que funcionen los mensajes flash
+
+    secret: 'ghostbitsession',
+    resave: false,
+    saveUninitialized: false,
+    store: new MySQLStore(database) //guarda la sesion en la BD
+
+}));
 app.use(flash());
 app.use(morgan('dev')); //muestra las peticiones al servidor por consola
 app.use(express.urlencoded({extended: false})); //Para aceptar tipos de datos sencillos
 app.use(express.json()); //Para usar JSONs
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(multer({ //Para subir imagenes
     storage,
     dest: path.join(__dirname, 'public/uploads'),
@@ -55,6 +66,12 @@ app.use(multer({ //Para subir imagenes
 }).single('image')); //Lo configuramos para que solo reciba una imagen del input con el nombre image
 
 //Variables globales
+app.use((req, res, next) => {
+    app.locals.success = req.flash('success');
+    app.locals.message = req.flash('message');
+    //app.locals.user = req.user; //Con esto obtenemos el usuario logeado
+    next();
+});
 
 //Rutas del servidor
 app.use(require('./routes/index-home'));

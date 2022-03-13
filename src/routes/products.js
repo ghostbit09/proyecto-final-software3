@@ -33,7 +33,7 @@ router.post('/add', async (req, res) => {
     //Se insertan los datos en la BD, await es para procesar esta peticion al tiempo
     //debido a que se hace de manera asincrona
     await pool.query('INSERT INTO productos set ?', [newProduct]);
-    //req.flash('success', 'Producto guardado exitosamente');
+    req.flash('success', 'Producto guardado exitosamente');
     res.redirect('/products');
 });
 
