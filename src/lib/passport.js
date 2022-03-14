@@ -10,7 +10,7 @@ passport.use('local.signin', new LocalStrategy({
     passReqToCallback: true
 }, async (req, username, password, done) => {
     console.log(req.body);
-    const rows = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
+    const rows = await pool.query('SELECT * FROM usuarios WHERE username = ?', [username]);
     if(rows.length > 0){
         const user = rows[0];
         const validPassword = await helpers.matchPassword(password, user.password);
@@ -34,29 +34,35 @@ passport.use('local.signup', new LocalStrategy({
 
 }, async (req, username, password, done) => { //callback luego de hacer el LocalStrategy
 
-    //const {fullname} = req.body;
+    const {cedula} = req.body;
+    const {nombre} = req.body;
+    const {apellido} = req.body;
+    const {email} = req.body;
     console.log(req.body);
     const newUser = {
 
         //NOTA: al colocar solo la palabra username, es lo
         //mismo que decir username: username, lo mismo con las demas
 
+        cedula,
+        nombre,
+        apellido,
+        email,
         username,
         password,
-        fullname
+        saldo: 0
     };
 
-    //newUser.password = await helpers.encryptPassword(password);
-    //const result = await pool.query('INSERT INTO users SET ?', [newUser]);
-    //newUser.id = result.insertId;
-    //return done(null, newUser);
+    newUser.password = await helpers.encryptPassword(password);
+    await pool.query('INSERT INTO usuarios SET ?', [newUser]);
+    return done(null, newUser);
 }));
 
 passport.serializeUser((user, done) => {
-    done(null, user.id);
+    done(null, user.cedula);
 });
 
-passport.deserializeUser(async (id, done) => {
-    const rows = await pool.query('SELECT * FROM users where id = ?', [id]);
+passport.deserializeUser(async (cedula, done) => {
+    const rows = await pool.query('SELECT * FROM usuarios WHERE cedula = ?', [cedula]);
     done(null, rows[0]);
 });

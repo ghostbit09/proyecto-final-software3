@@ -7,16 +7,20 @@ const pool = require('../database');
 //Para borrar las imagenes al momento de borrar objetos en la BD
 const fs = require('fs');
 
+//Para validar si el usuario esta logeado
+const {isLoggedIn} = require('../lib/auth');
+const path = require('path');
+
 router.get('/', (req, res) => {
     res.render('products/list');
 });
 
-router.get('/add', (req, res) => {
+router.get('/add', isLoggedIn, (req, res) => {
     res.render('products/add');
 });
 
 //Recibe los datos del formulario
-router.post('/add', async (req, res) => {
+router.post('/add', isLoggedIn, async (req, res) => {
 
     const {nombre, precio, cantidad, descripcion} = req.body;
 
@@ -27,7 +31,6 @@ router.post('/add', async (req, res) => {
         descripcion,
         estado: true
         //image_name: req.file.filename
-        //user_id: req.user.id
     };
 
     //Se insertan los datos en la BD, await es para procesar esta peticion al tiempo

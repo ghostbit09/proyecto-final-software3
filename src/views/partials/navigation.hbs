@@ -7,34 +7,34 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
-        <!--{{#if user}}-->
+        {{#if user}}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">
             Links
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Todos los links</a></li>
+            <li><a class="dropdown-item" href="/products">Productos</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item" href="">Añade un link</a></li>
+            <li><a class="dropdown-item" href="/products/add">Añade un link</a></li>
           </ul>
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link">Perfil</a>
+          <a href="/profile" class="nav-link">Perfil</a>
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link">Cerrar sesion</a>
+          <a href="/logout" class="nav-link">Cerrar sesion</a>
         </li>
-        <!--{{else}}-->
+        {{else}}
         <li class="nav-item">
-          <a href="#" class="nav-link">Iniciar sesion</a>
+          <a href="/signin" class="nav-link">Iniciar sesion</a>
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link">Registrase</a>
+          <a href="/signup" class="nav-link">Registrase</a>
         </li>
-        <!--{{/if}}-->
+        {{/if}}
       </ul>
     </div>
   </div>
